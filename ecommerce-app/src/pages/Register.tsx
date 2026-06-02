@@ -1,84 +1,103 @@
-import {useState} from 'react';
-import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
-import { auth } from '../lib/firebase/firebase';
-import styles from '../styles/auth-styles';
-import { useNavigate } from 'react-router-dom';
+import { useState, type FormEvent } from "react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../lib/firebase/firebase";
+import styles from "../styles/auth-styles";
 
 function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  setError("");
-  setSuccess("");
+    setError("");
+    setSuccess("");
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    if (!name.trim()) {
+      setError("Name is required.");
+      return;
+    }
 
-    const user = userCredential.user;
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
 
-    await updateProfile(user, {
-      displayName: name,
-    });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-    setSuccess("Account created successfully!");
+      const user = userCredential.user;
 
-    navigate("/profile");
-  } catch (error) {
+      await updateProfile(user, {
+        displayName: name,
+      });
 
-    console.error(error);
-  }
-};
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name,
+        email,
+        createdAt: new Date(),
+      });
 
-return (
-  <div style={styles.container}>
-    <div style={styles.card}>
-      <h2 style={styles.title}>Register</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
-      <form onSubmit={handleRegister} style={styles.form}>
-        <input
-          style={styles.input}
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+      setSuccess("Account created successfully!");
+      navigate("/profile");
+    } catch (error) {
+      setError("Failed to create account.");
+      console.error(error);
+    }
+  };
 
-        <input
-          style={styles.input}
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+  return (
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Register</h2>
 
-        <input
-          style={styles.input}
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {success && <p style={{ color: "green" }}>{success}</p>}
 
-        <button style={styles.button} type="submit">
-          Register
-        </button>
-      </form>
+        <form onSubmit={handleRegister} style={styles.form}>
+          <input
+            style={styles.input}
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <input
+            style={styles.input}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <input
+            style={styles.input}
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button style={styles.button} type="submit">
+            Register
+          </button>
+        </form>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
-export default Register
+export default Register;

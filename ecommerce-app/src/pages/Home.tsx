@@ -1,30 +1,30 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../redux/store";
 import { addToCart } from "../redux/cartSlice";
-import { getCategories, getProducts, getProductsByCategory } from "../services/api";
+import { getProductsFromFirestore } from "../services/productService";
+import type { Product } from "../types/product";
 
 function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { data: categories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
+  useEffect(() => {
+    const loadProducts = async () => {
+      const data = await getProductsFromFirestore();
+      setProducts(data);
+    };
 
-  const { data: products, isLoading, isError } = useQuery({
-    queryKey: ["products", selectedCategory],
-    queryFn: () =>
-      selectedCategory
-        ? getProductsByCategory(selectedCategory)
-        : getProducts(),
-  });
+    void loadProducts();
+  }, []);
 
-  if (isLoading) return <p>Loading products...</p>;
-  if (isError) return <p>Something went wrong.</p>;
+  const categories = [...new Set(products.map((product) => product.category))];
+
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
 
   return (
     <main style={{ padding: "1rem" }}>
@@ -36,7 +36,7 @@ function Home() {
       >
         <option value="">All categories</option>
 
-        {categories?.map((category) => (
+        {categories.map((category) => (
           <option key={category} value={category}>
             {category}
           </option>
@@ -51,7 +51,7 @@ function Home() {
           gap: "1rem",
         }}
       >
-        {products?.map((product) => (
+        {filteredProducts.map((product) => (
           <div
             key={product.id}
             style={{
@@ -77,7 +77,6 @@ function Home() {
             <p>{product.category}</p>
             <p>{product.description}</p>
             <p>${product.price}</p>
-            <p>Rating: {product.rating.rate}</p>
 
             <button onClick={() => dispatch(addToCart(product))}>
               Add to Cart

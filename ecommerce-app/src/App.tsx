@@ -8,6 +8,7 @@ import Profile from "./pages/Profile.tsx";
 import Logout from "./pages/Logout.tsx";
 import Register from "./pages/Register.tsx";
 import Login from "./pages/Login.tsx";
+import Products from "./pages/Products.tsx";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/products" element={<Products />} />
         </Routes>
       </AuthProvider>
     </>

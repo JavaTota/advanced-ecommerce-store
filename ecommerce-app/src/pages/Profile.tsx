@@ -1,12 +1,15 @@
 import { useState, type FormEvent } from "react";
 import { useAuth } from "../context/AuthContext";
 import { updateProfile, deleteUser } from "firebase/auth";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { db } from "../lib/firebase/firebase";
 import styles from "../styles/auth-styles";
 
 function Profile() {
   const { user } = useAuth();
 
   const [name, setName] = useState(user?.displayName || "");
+  const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -19,11 +22,15 @@ function Profile() {
     }
 
     try {
-      await updateProfile(user, {
-        displayName: name,
+      await updateProfile(user, { displayName: name });
+
+      await updateDoc(doc(db, "users", user.uid), {
+        name,
+        address,
       });
 
       setMessage("Profile updated successfully.");
+      setError("");
     } catch (error) {
       console.error("Error updating profile:", error);
       setError("Failed to update profile.");
@@ -37,8 +44,11 @@ function Profile() {
     }
 
     try {
+      await deleteDoc(doc(db, "users", user.uid));
       await deleteUser(user);
+
       setMessage("Account deleted successfully.");
+      setError("");
     } catch (error) {
       console.error("Error deleting account:", error);
       setError("Failed to delete account. Please log in again and retry.");
@@ -67,6 +77,14 @@ function Profile() {
             type="email"
             value={user?.email || ""}
             disabled
+          />
+
+          <input
+            style={styles.input}
+            type="text"
+            placeholder="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
           />
 
           <button style={styles.button} type="submit">

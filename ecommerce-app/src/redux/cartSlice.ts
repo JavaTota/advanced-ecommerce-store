@@ -37,7 +37,7 @@ const cartSlice = createSlice({
             saveCartToSessionStorage(state.cartItems);
         },
 
-        removeFromCart: (state, action: PayloadAction<number>) => {
+        removeFromCart: (state, action: PayloadAction<string>) => {
             state.cartItems = state.cartItems.filter(
                 (item) => item.id !== action.payload
             );
@@ -50,7 +50,7 @@ const cartSlice = createSlice({
             sessionStorage.removeItem("cart");
         },
 
-        increaseQuantity: (state, action: PayloadAction<number>) => {
+        increaseQuantity: (state, action: PayloadAction<string>) => {
             const item = state.cartItems.find((item) => item.id === action.payload);
 
             if (item) {
@@ -60,7 +60,7 @@ const cartSlice = createSlice({
             saveCartToSessionStorage(state.cartItems);
         },
 
-        decreaseQuantity: (state, action: PayloadAction<number>) => {
+        decreaseQuantity: (state, action: PayloadAction<string>) => {
             const item = state.cartItems.find((item) => item.id === action.payload);
 
             if (item && item.quantity > 1) {
