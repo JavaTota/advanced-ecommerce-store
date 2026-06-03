@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="auth-container"
+  >
+    <div
+      class="auth-card"
+    >
+      <h2
+        class="auth-title"
+      >
+        Register
+      </h2>
+      <form
+        class="auth-form"
+      >
+        <input
+          class="auth-input"
+          placeholder="Name"
+          type="text"
+          value=""
+        />
+        <input
+          class="auth-input"
+          placeholder="Email"
+          type="email"
+          value=""
+        />
+        <input
+          class="auth-input"
+          placeholder="Password"
+          type="password"
+          value=""
+        />
+        <button
+          class="auth-button"
+          type="submit"
+        >
+          Register
+        </button>
+      </form>
+    </div>
+  </div>
+</DocumentFragment>
+`;
