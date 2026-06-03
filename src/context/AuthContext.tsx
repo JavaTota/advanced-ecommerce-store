@@ -8,9 +8,9 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
-    user: null,
-    setUser: (user: User | null) => {}
-})
+  user: null,
+  setUser: () => {}
+});
 
 export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const [user, setUser] = useState<User | null>(null);
@@ -35,5 +35,5 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
 }
 
 export function useAuth() {
-  return useContext(AuthContext);
+    return useContext(AuthContext);
 }
