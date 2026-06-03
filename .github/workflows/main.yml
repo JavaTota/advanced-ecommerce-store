@@ -19,6 +19,7 @@ jobs:
           node-version: 24.x
       #step 3: Install dependencies
       - name: Install dependencies
+        working-directory: ecommerce-app
         run: npm install
       #step 4: Run tests
       - name: Run tests
