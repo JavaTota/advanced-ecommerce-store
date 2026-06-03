@@ -22,7 +22,9 @@ jobs:
         run: npm install
       #step 4: Run tests
       - name: Run tests
+        working-directory: ecommerce-app
         run: npm test
       #step 5: Build application
       - name: Build application
+        working-directory: ecommerce-app
         run: npm run build
