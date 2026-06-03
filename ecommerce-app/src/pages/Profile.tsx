@@ -3,7 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import { updateProfile, deleteUser } from "firebase/auth";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../lib/firebase/firebase";
-import "../styles/auth.css";
+import "../styles/auth-styles.css";
+
 
 function Profile() {
   const { user } = useAuth();

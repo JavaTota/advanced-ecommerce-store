@@ -3,7 +3,8 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../lib/firebase/firebase";
-import "../styles/auth.css";
+import "../styles/auth-styles.css";
+
 
 function Register() {
   const [email, setEmail] = useState("");
