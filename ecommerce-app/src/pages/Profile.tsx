@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { updateProfile, deleteUser } from "firebase/auth";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../lib/firebase/firebase";
-import styles from "../styles/auth-styles";
+import "../styles/auth.css";
 
 function Profile() {
   const { user } = useAuth();
@@ -56,16 +56,16 @@ function Profile() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>Profile</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Profile</h2>
 
-        {message && <p>{message}</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {message && <p className="auth-success">{message}</p>}
+        {error && <p className="auth-error">{error}</p>}
 
-        <form onSubmit={handleUpdateProfile} style={styles.form}>
+        <form onSubmit={handleUpdateProfile} className="auth-form">
           <input
-            style={styles.input}
+            className="auth-input"
             type="text"
             placeholder="Name"
             value={name}
@@ -73,31 +73,27 @@ function Profile() {
           />
 
           <input
-            style={styles.input}
+            className="auth-input"
             type="email"
             value={user?.email || ""}
             disabled
           />
 
           <input
-            style={styles.input}
+            className="auth-input"
             type="text"
             placeholder="Address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
 
-          <button style={styles.button} type="submit">
+          <button className="auth-button" type="submit">
             Update Profile
           </button>
         </form>
 
         <button
-          style={{
-            ...styles.button,
-            marginTop: "1rem",
-            backgroundColor: "#dc2626",
-          }}
+          className="auth-button"
           type="button"
           onClick={handleDeleteAccount}
         >

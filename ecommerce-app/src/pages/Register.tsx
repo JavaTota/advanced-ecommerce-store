@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../lib/firebase/firebase";
-import styles from "../styles/auth-styles";
+import "../styles/auth.css";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -59,16 +59,16 @@ function Register() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>Register</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Register</h2>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
+        {error && <p className="auth-error">{error}</p>}
+        {success && <p className="auth-success">{success}</p>}
 
-        <form onSubmit={handleRegister} style={styles.form}>
+        <form onSubmit={handleRegister} className="auth-form">
           <input
-            style={styles.input}
+            className="auth-input"
             type="text"
             placeholder="Name"
             value={name}
@@ -76,7 +76,7 @@ function Register() {
           />
 
           <input
-            style={styles.input}
+            className="auth-input"
             type="email"
             placeholder="Email"
             value={email}
@@ -84,14 +84,14 @@ function Register() {
           />
 
           <input
-            style={styles.input}
+            className="auth-input"
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button style={styles.button} type="submit">
+          <button className="auth-button" type="submit">
             Register
           </button>
         </form>
